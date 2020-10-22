@@ -3,10 +3,10 @@ const express = require('express');
 const app = express();
 
 const movies = [
-    { "title": "Jaws", "year": 1975, "rating": 8 },
-    { "title": "Avatar", "year": 2009, "rating": 7.8 },
-    { "title": "Brazil", "year": 1985, "rating": 8 },
-    { "title":"الإرهاب والكباب‎", "year": 1992, "rating": 6.2 }
+    { "title": "Joker", "year": 2019, "rating": 8.5 },
+    { "title": "Birdbox", "year": 1985, "rating": 6.6 },
+    { "title": "spy", "year": 2015, "rating": 7 },
+    { "title":"I Am Legend", "year": 2007, "rating": 7.2 }
 ]
 
 app.get('/movies/add',(req,res)=>{
@@ -15,6 +15,21 @@ app.get('/movies/add',(req,res)=>{
 
 app.get('/movies/get/',(req,res)=>{
     res.status(200).send(movies)
+})
+
+app.get('/movies/get/by-date',(req,res)=>{
+    sortedMovies = movies.sort((a,b)=>a.year - b.year)
+    res.status(200).send(sortedMovies)
+})
+
+app.get('/movies/get/by-rating',(req,res)=>{
+    sortedMovies = movies.sort((a,b)=>a.rating - b.rating)
+    res.status(200).send(sortedMovies)
+})
+
+app.get('/movies/get/by-title',(req,res)=>{
+    sortedMovies = movies.sort((a,b) => (a.title > b.title) ? 1 : ((b.title > a.title) ? -1 : 0)); 
+    res.status(200).send(sortedMovies)
 })
 
 app.get('/movies/edit',(req,res)=>{
