@@ -10,9 +10,40 @@ const movies = [
     { "title":"الإرهاب والكباب‎", "year": 1992, "rating": 6.2 }
 ]
 
+// ADD
+
+// app.get('/search?q=tobi+ferret',(req,res)=>{
+//     res.send(req.query.q    )
+//     res.status(200).send(req.query.title);
+// })
+
+
+// /search?q=tobi+ferret
+
 app.get('/movies/add',(req,res)=>{
-    res.status(200).send('add');
+
+    if(Object.keys(req.query).length === 0){
+        res.send('add')
+    }
+    else{
+        if(req.query.title===undefined || req.query.year === undefined || isNaN(req.query.year) || req.query.year.length!==4 || req.query.rating === null){
+            res.status(403).send("{status:403, error:true, message:'you cannot create a movie without providing a title and a year'}")
+        }else{
+            if(req.query.rating===null || req.query.rating === undefined){
+                req.query.rating=4;
+            }
+            let x = req.query;
+            movies.push(x)
+            res.send(movies)
+        }
+      
+    }
+
 })
+
+
+
+// GET
 
 app.get('/movies/get/',(req,res)=>{
     res.status(200).send(movies)
@@ -33,13 +64,15 @@ app.get('/movies/get/by-title',(req,res)=>{
     res.status(200).send(sortedMovies)
 })
 
+// Edit
 
 app.get('/movies/edit',(req,res)=>{
-    res.status(200).send('edit');
+    let movieList = movies.map(movie=>`{Movie: ${movie.title},Year: ${movie.year},Rating: ${movie.rating}}`)
+    res.status(200).send(`${movieList}`);
 })
 
 app.get('/movies/edit/id/:title',(req,res)=>{
-    
+
     let movieTitle = movies.map(movie=>movie).filter(movie=>movie.title===req.params.title);
 
     if(movieTitle){
@@ -51,9 +84,15 @@ app.get('/movies/edit/id/:title',(req,res)=>{
     }
 })
 
+
+
 app.get('/movies/delete',(req,res)=>{
     res.status(200).send('delete'); 
 })
+
+
+
+
 const PORT = process.env.port || 5000;
 
 app.listen(PORT, ()=>{console.log(`SERVER STARTED ${PORT}`)})
