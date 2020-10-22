@@ -2,53 +2,28 @@ const express = require('express');
 
 const app = express();
 
-app.get('/',(req,res) => {
-    res.send('ok')
+const movies = [
+    { "title": "Jaws", "year": 1975, "rating": 8 },
+    { "title": "Avatar", "year": 2009, "rating": 7.8 },
+    { "title": "Brazil", "year": 1985, "rating": 8 },
+    { "title":"الإرهاب والكباب‎", "year": 1992, "rating": 6.2 }
+]
+
+app.get('/movies/add',(req,res)=>{
+    res.status(200).send('add');
 })
 
-
-app.get('/test',(req,res) => {
-    res.status(200).send('{status:200, message:"ok"}')
+app.get('/movies/get/',(req,res)=>{
+    res.status(200).send(movies)
 })
 
-
-app.get('/time',(req,res) => {
-
-    const hourDate = new Date();
-    const h = hourDate.getHours();
-    const m = hourDate.getMinutes();
-    const s = hourDate.getSeconds();
-    const time = `${h}:${m}:${s}`;
-
-    res.status(200).send(`{status:200, message:"${time}"}`)
+app.get('/movies/edit',(req,res)=>{
+    res.status(200).send('edit');
 })
 
-
-app.get('/test',(req,res) => {
-    res.status(200).send('{status:200, message:"ok"}')
+app.get('/movies/delete',(req,res)=>{
+    res.status(200).send('delete'); 
 })
-
-app.get('/hello/:id?',(req,res) => {
-
-    if(req.params.id === undefined){
-        res.status(200).send(`{status: 200, message: Hello}`);
-    }
-    else{
-        res.status(200).send(`{status: 200, message: Hello, ${req.params.id}}`)
-    }
-})
-
-app.get('/search',(req,res) => {
-    
-    if(req.query.s===undefined){
-        res.status(500).send({status:500, error:true, message:"you have to provide a search"});
-    }else{
-        res.status(200).send(`{status:200, message:"ok", data:${req.query.s}}`)
-    }
-    
-})
-
-
 const PORT = process.env.port || 5000;
 
 app.listen(PORT, ()=>{console.log(`SERVER STARTED ${PORT}`)})
